@@ -34,10 +34,14 @@ public class JwtUserDetailsService implements UserDetailsService {
 	}
 	
 	
-	public DAOUser save(UserDTO user) {
+	public DAOUser save(UserDTO userdto) {
+		DAOUser user = userDao.findByUsername(userdto.getUsername());
+		if(user != null) {
+			return user;
+		}
 		DAOUser newUser = new DAOUser();
-		newUser.setUsername(user.getUsername());
-		newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+		newUser.setUsername(userdto.getUsername());
+		newUser.setPassword(bcryptEncoder.encode(userdto.getPassword()));
 		return userDao.save(newUser);
 	}
 }
