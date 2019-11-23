@@ -11,6 +11,7 @@
 	<groupId>com.ntt</groupId>
 	<artifactId>VendorSelection</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>VendorSelection</name>
 	<description>VendorSelection Demo project</description>
 
