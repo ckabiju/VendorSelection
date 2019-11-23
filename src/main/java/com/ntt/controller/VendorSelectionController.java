@@ -10,4 +10,9 @@ public class VendorSelectionController {
 	public String firstPage() {
 		return "Hello World";
 	}
+	
+	@RequestMapping({ "/test" })
+	public String testPage() {
+		return "Testing Hello World";
+	}
 }
