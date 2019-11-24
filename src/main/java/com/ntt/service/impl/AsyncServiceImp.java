@@ -7,8 +7,9 @@ import com.ntt.service.AsyncService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+
 @Service
+@Transactional
 public class AsyncServiceImp implements  AsyncService {
 
     private final FileContentDao fileContentRepository;

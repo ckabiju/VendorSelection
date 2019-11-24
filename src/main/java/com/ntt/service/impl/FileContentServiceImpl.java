@@ -12,10 +12,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
@@ -31,6 +30,7 @@ import java.util.UUID;
 public class FileContentServiceImpl implements FileContentService {
 
     private final Logger log = LoggerFactory.getLogger(FileContentServiceImpl.class);
+    private final int NUMBER_OF_FIELDS = 4;
 
     private final FileContentDao fileContentRepository;
 
@@ -39,45 +39,6 @@ public class FileContentServiceImpl implements FileContentService {
     public FileContentServiceImpl(FileContentDao fileContentRepository,AsyncService asyncService) {
 		this.asyncService = asyncService;
 		this.fileContentRepository = fileContentRepository;
-    }
-
-    /**
-     * Save a fileContent.
-     *
-     * @param fileContent the entity to save.
-     * @return the persisted entity.
-     */
-    @Override
-    public FileContent save(FileContent fileContent) {
-        log.debug("Request to save FileContent : {}", fileContent);
-        return fileContentRepository.save(fileContent);
-    }
-
-    /**
-     * Get all the fileContents.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<FileContent> findAll(Pageable pageable) {
-        log.debug("Request to get all FileContents");
-        return fileContentRepository.findAll(pageable);
-    }
-
-
-    /**
-     * Get one fileContent by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Override
-   @Transactional (readOnly = true)
-    public Optional<FileContent> findOne(Long id) {
-        log.debug("Request to get FileContent : {}", id);
-        return fileContentRepository.findById(id);
     }
 
 	@Override
@@ -111,13 +72,15 @@ public class FileContentServiceImpl implements FileContentService {
 	private StockDetails  getNewStockDetails(String[] siteItem, UUID uuid) {
 		StockDetails stockDetails = null;
 		if( null != siteItem) {
-			
+
 				stockDetails =new StockDetails();
 				stockDetails.setNpi(siteItem[0]);
 				stockDetails.setNdc(siteItem[1]);
 				stockDetails.setUnits(siteItem[2]);
 				stockDetails.setUnitsCost(siteItem[3]);
 				stockDetails.setGuid(uuid);
+				// As of now we are considering NPI site number as Site Name
+				stockDetails.setSiteName(siteItem[0]);
 			
 		}
 		return stockDetails;
@@ -136,40 +99,42 @@ public class FileContentServiceImpl implements FileContentService {
 	}
 
 	@Async("taskExecutor")
+	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 	@Override
 	public void parsingFile(MultipartFile file,FileContent fileContent) throws InterruptedException {
 		
 		 log.debug("Entering parsingFile() FileContent : {}");
-		 		 /*
-		  NPI|NDC|Units|UnitCost
-		0000000009|00000001465|2555|258.72
-		  */
-		 Thread.sleep(30000L);
+		 //  NPI|NDC|Units|UnitCost	0000000009|00000001465|2555|258.72
+
 		long invalidRecordCount = 0;
 		long validRecordCount = 0;
 		long totalRecordCount = 0;
 		try {
 			
-				String tempFilePath = getTemFile(fileContent);
-				File tempFile = new File(tempFilePath);
-				LineIterator it = FileUtils.lineIterator(tempFile);
+			String tempFilePath = getTemFile(fileContent);
+			File tempFile = new File(tempFilePath);
+			LineIterator it = FileUtils.lineIterator(tempFile);
 				
 				try {
 					if(it.hasNext()) {
 						String firstLine = it.nextLine();
 					}
 				    while (it.hasNext()) {
-				        String line = it.nextLine();
-				        totalRecordCount++;
-				        String[] siteItem = line.split("\\|");
-				        StockDetails stockDetails = getNewStockDetails(siteItem,fileContent.getGuid());
-				        if( stockDetails != null)
-							asyncService.saveStockDetails(stockDetails);
-				        if(!(isNumeric(siteItem[2]) &&  isNumeric(siteItem[3]))) {
-				        	invalidRecordCount++;
-				        	
-				        }
-				     }
+						String line = it.nextLine();
+						totalRecordCount++;
+						String[] siteItem = line.split("\\|");
+						if (null != siteItem && siteItem.length == NUMBER_OF_FIELDS) {
+							StockDetails stockDetails = getNewStockDetails(siteItem, fileContent.getGuid());
+							if (stockDetails != null)
+								asyncService.saveStockDetails(stockDetails);
+							if (!((isNumeric(siteItem[2]) && isNumeric(siteItem[3])))) {
+								invalidRecordCount++;
+							}
+						}else{
+							invalidRecordCount++;
+						}
+
+					}
 				} finally {
 				    it.close();
 				    FileUtils.deleteQuietly(tempFile);

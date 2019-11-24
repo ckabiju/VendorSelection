@@ -89,9 +89,13 @@ public class SiteServiceImpl implements SiteService {
 		Optional<StockDetails> stockDetails = stockDetailsRepository.findFirstByOrderByNpiAsc(npi);
 		
 		Site site = new Site();
-		site.setNpi(stockDetails.get().getNpi());
-		site.setSiteName(stockDetails.get().getSiteName());
-		return Optional.of(site);
+		if(stockDetails.isPresent()) {
+			site.setNpi(stockDetails.get().getNpi());
+			site.setSiteName(stockDetails.get().getSiteName());
+			return Optional.of(site);
+		}
+		return Optional.empty();
+
 			
 	}
 
