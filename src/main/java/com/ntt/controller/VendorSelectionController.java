@@ -8,7 +8,7 @@ public class VendorSelectionController {
 
 	@RequestMapping({ "/hello" })
 	public String firstPage() {
-		return "Hello World";
+		return "Hello World First Code commit";
 	}
 	
 	@RequestMapping({ "/test" })
