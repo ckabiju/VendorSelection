@@ -152,7 +152,6 @@ public class FileContentServiceImpl implements FileContentService {
 		
     	log.debug("Entering parsingFile() FileContent : {}");
 		long invalidRecordCount = 0;
-		long validRecordCount = 0;
 		long totalRecordCount = 0;
 		try {
 			
@@ -162,7 +161,7 @@ public class FileContentServiceImpl implements FileContentService {
 				
 				try {
 					if(it.hasNext()) {
-						String firstLine = it.nextLine();
+						it.nextLine();
 					}
 				    while (it.hasNext()) {
 						String line = it.nextLine();
@@ -172,7 +171,7 @@ public class FileContentServiceImpl implements FileContentService {
 							StockDetails stockDetails = getNewStockDetails(siteItem, fileContent.getGuid());
 							if (stockDetails != null)
 								asyncService.saveStockDetails(stockDetails);
-							if (!((isNumeric(siteItem[2]) && isNumeric(siteItem[3])))) {
+							if (!( isNumeric(siteItem[2]) && isNumeric(siteItem[3]))) {
 								invalidRecordCount++;
 							}
 						}else if(line.length() > 0){

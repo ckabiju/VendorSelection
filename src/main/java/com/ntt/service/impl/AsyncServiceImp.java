@@ -27,7 +27,7 @@ public class AsyncServiceImp implements  AsyncService {
      * @param stockDetails the entity to save.
      *
      */
-
+    @Override
     public void saveStockDetails(StockDetails stockDetails){
         stockDetailsRepository.save(stockDetails);;
 
@@ -39,6 +39,7 @@ public class AsyncServiceImp implements  AsyncService {
      * @param fileContent the entity to save.
      *
      */
+    @Override
     public void saveFileContent(FileContent fileContent){
         fileContentRepository.save(fileContent);;
     }

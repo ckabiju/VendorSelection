@@ -175,7 +175,7 @@ public class FileContent implements Serializable {
         hashCode += 7 * status.hashCode();
         hashCode += 7 * guid.hashCode();
 
-        return 31;
+        return hashCode;
     }
 
     @Override

@@ -19,7 +19,6 @@ import java.util.Optional;
 @Transactional
 public class SiteServiceImpl implements SiteService {
 
-    private final Logger log = LoggerFactory.getLogger(SiteServiceImpl.class);
     private final StockDetailsDao stockDetailsRepository;
 	private final SiteDao siteRepository;
 
@@ -34,6 +33,7 @@ public class SiteServiceImpl implements SiteService {
 	 * @param stockDetails the entity to save.
 	 * @return the persisted entity.
 	 */
+	@Override
     public void saveStockDetails(StockDetails stockDetails){
 
     	stockDetailsRepository.save(stockDetails);
@@ -45,6 +45,7 @@ public class SiteServiceImpl implements SiteService {
 	 * @param site the entity to save.
 	 * @return the persisted entity.
 	 */
+	@Override
 	public SiteDTO save(SiteDTO site){
 		Site siteRecord = siteRepository.save(convertSiteDTOToSite(site));
 		return  convertSiteToSiteDTO(siteRecord);

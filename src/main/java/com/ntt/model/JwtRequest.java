@@ -18,6 +18,9 @@ public class JwtRequest implements Serializable {
 	 */
 	public JwtRequest()
 	{
+		/**
+		 * Default constructor for JSON Parsing
+		 */
 		
 	}
 
