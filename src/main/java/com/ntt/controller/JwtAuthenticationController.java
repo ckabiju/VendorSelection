@@ -50,7 +50,7 @@ public class JwtAuthenticationController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
@@ -70,7 +70,7 @@ public class JwtAuthenticationController {
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 
-	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) {
 		return ResponseEntity.ok(userDetailsService.save(user));
 	}
 
