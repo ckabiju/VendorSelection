@@ -45,8 +45,9 @@ public class FileController{
         try {
 			fileContentService.parsingFile(file, result);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			log.debug("REST request to Parsing Failed Exception : {}");
+			// clean up state...
+			Thread.currentThread().interrupt();
 		}
 
         return ResponseEntity.created(new URI("/api/files/qoh/" + result.getId())).body(uploadFileResponseDTO);

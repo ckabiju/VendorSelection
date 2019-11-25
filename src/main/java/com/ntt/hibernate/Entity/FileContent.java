@@ -159,7 +159,6 @@ public class FileContent implements Serializable {
                 (( null != fileName && null != obj.fileName) && fileName.equals(obj.fileName)) &&
                 (( null != invalidRecordCount && null != obj.invalidRecordCount) && invalidRecordCount.equals(obj.invalidRecordCount)) &&
                 (( null != totalRecordCount && null != obj.totalRecordCount) && totalRecordCount.equals(obj.totalRecordCount))&&
-                (( null != guid && null != obj.guid) && guid.equals(obj.guid)) &&
                 (( null != guid && null != obj.guid) && guid.equals(obj.guid));
 
     }
