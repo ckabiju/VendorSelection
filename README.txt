@@ -42,9 +42,13 @@ API's supported:
 			Type: POST
 			Authorization: Enter 'Bearer Token' from step3 
 			Body: pass  'site' details in json format.
-					 Eg:	{"site": { "npi": "0000000009","siteName": "Healthy Drug #10"}} 
+					 Eg:	{
+                                 "npi": "00000000014",
+                                "siteName": "Healthy Drug #14"
+
+                             }
 			
-			Returns status 201/Created, and all the records which got created.
+			Returns status 201/Created, and  record which got created.
 			
 	7) Load Site details.
 			URL:  http://vendorselection-env.iacqaieg2y.us-east-1.elasticbeanstalk.com/api/sites/{npi}
