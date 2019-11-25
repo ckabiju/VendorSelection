@@ -1,6 +1,7 @@
 package com.ntt.model;
 
 import java.io.Serializable;
+import com.ntt.hibernate.Entity.Site;
 
 /**
  * A DriverSite.
