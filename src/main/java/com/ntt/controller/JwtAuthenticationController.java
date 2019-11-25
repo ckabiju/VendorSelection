@@ -1,5 +1,13 @@
 package com.ntt.controller;
 
+/**
+ * Expose a POST API /authenticate using the JwtAuthenticationController. 
+ * The POST API gets username and password in the body- Using Spring Authentication Manager we 
+ * authenticate the username and password.If the credentials are valid, 
+ * a JWT token is created using the JWTTokenUtil and provided to the client.
+ */
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +28,6 @@ import com.ntt.model.UserDTO;
 import com.ntt.service.JwtUserDetailsService;
 
 
-
-
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
@@ -35,6 +41,13 @@ public class JwtAuthenticationController {
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
 
+	/**
+	 * This method authenticates the user details and
+	 * returns a response with a valid token if the credential are valid.
+	 * @param authenticationRequest
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
@@ -48,12 +61,23 @@ public class JwtAuthenticationController {
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 	
-	
+	/**
+	 * This method registers a new user. 
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
 		return ResponseEntity.ok(userDetailsService.save(user));
 	}
 
+	/**
+	 * Authenticates the credentials using spring AuthenticationManage.
+	 * @param username
+	 * @param password
+	 * @throws Exception
+	 */
 	private void authenticate(String username, String password) throws Exception {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));

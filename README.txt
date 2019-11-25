@@ -61,4 +61,5 @@ Note:
 		AWS pipeline which deploys it to AWS Elastic BeanStalk environment.
 	3) Latest code is available  on git repository: https://github.com/ckabiju/VendorSelection.git
 	
-	 	
+Known Issue: 
+	1) on AWS BeanStalk environment we are facing issue with uploading large files (1Mb and above).

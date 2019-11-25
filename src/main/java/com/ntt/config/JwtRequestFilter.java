@@ -1,5 +1,12 @@
 package com.ntt.config;
 
+/**
+ * The JwtRequestFilter extends the Spring Web Filter OncePerRequestFilter class. 
+ * For any incoming request this Filter class gets executed. 
+ * It checks if the request has a valid JWT token. 
+ * If it has a valid JWT Token then it sets the Authentication in the context, 
+ * to specify that the current user is authenticated.
+ */
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -28,6 +35,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
+	/**
+	 * This method validates the token passed in request header.
+	 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {

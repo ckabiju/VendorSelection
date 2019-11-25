@@ -1,5 +1,8 @@
 package com.ntt.model;
 
+/**
+ * This is class is required for creating a response containing the JWT to be returned to the user.
+ */
 import java.io.Serializable;
 
 public class JwtResponse implements Serializable {

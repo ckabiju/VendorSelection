@@ -1,5 +1,10 @@
 package com.ntt.config;
 
+/**
+ * This class extends the WebSecurityConfigurerAdapter is a convenience class that allows 
+ * customization to both WebSecurity and HttpSecurity.
+ */
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
