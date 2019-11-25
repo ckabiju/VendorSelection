@@ -49,7 +49,7 @@ public class JwtAuthenticationController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
@@ -68,7 +68,7 @@ public class JwtAuthenticationController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) {
 		return ResponseEntity.ok(userDetailsService.save(user));
 	}
 
@@ -78,13 +78,13 @@ public class JwtAuthenticationController {
 	 * @param password
 	 * @throws Exception
 	 */
-	private void authenticate(String username, String password) throws Exception {
+	private void authenticate(String username, String password) {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
-			throw new Exception("USER_DISABLED", e);
+			throw new DisabledException("USER_DISABLED", e);
 		} catch (BadCredentialsException e) {
-			throw new Exception("INVALID_CREDENTIALS", e);
+			throw new BadCredentialsException("INVALID_CREDENTIALS", e);
 		}
 	}
 }

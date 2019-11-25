@@ -58,7 +58,7 @@ public class FileContentServiceImpl implements FileContentService {
 				multipartToFile(fileContent,fileContent2);
 			} catch (IllegalStateException | IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn("Error while converting MultipartFile to File.. " + e);
 			}
 		return fileContent2;
 	}
@@ -141,7 +141,7 @@ public class FileContentServiceImpl implements FileContentService {
 				
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			 log.debug("Exiting  parsingFile() IOException : {}");
+			 log.debug("Exiting  parsingFile() IOException : {}" + e);
 		}
 		 Optional<FileContent> record = fileContentRepository.findById(fileContent.getId());
 		 FileContent finalRecord = record.get();

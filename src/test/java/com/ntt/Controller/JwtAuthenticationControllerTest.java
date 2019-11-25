@@ -70,7 +70,11 @@ public class JwtAuthenticationControllerTest {
 
 	@Test
 	public void createAuthenticationTokenUnauthorizedTest() throws Exception {
-
+		
+		DAOUser user = new DAOUser();
+		user.setUsername("nttuser");
+		user.setPassword("$2a$10$HwR8J.ssfQw07AezBAJYMe1OOkAFXYwRMBg2uD0qQSJ0wVA4p6O4m");
+		
 		JwtRequest jwtRequest = new JwtRequest();
 		jwtRequest.setUsername("nttuser");
 		jwtRequest.setPassword("password1");
@@ -78,7 +82,7 @@ public class JwtAuthenticationControllerTest {
 		String json = gson.toJson(jwtRequest);
 		URI myURI = new URI("/authenticate");
 
-		given(userDao.findByUsername(Mockito.anyString())).willReturn(null);
+		given(userDao.findByUsername(Mockito.anyString())).willReturn(user);
 		mvc.perform(post(myURI).with(SecurityMockMvcRequestPostProcessors.user("nttuser").password("password"))
 				.contentType(MediaType.APPLICATION_JSON).content(json)).andDo(print())
 				.andExpect(status().isUnauthorized());
