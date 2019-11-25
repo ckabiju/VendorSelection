@@ -21,11 +21,24 @@ public class AsyncServiceImp implements  AsyncService {
         this.stockDetailsRepository = stockDetailsRepository;
     }
 
+    /**
+     * Save a Stock Details.
+     *
+     * @param stockDetails the entity to save.
+     *
+     */
+
     public void saveStockDetails(StockDetails stockDetails){
         stockDetailsRepository.save(stockDetails);;
 
    }
 
+    /**
+     * Save fileContent.
+     *
+     * @param fileContent the entity to save.
+     *
+     */
     public void saveFileContent(FileContent fileContent){
         fileContentRepository.save(fileContent);;
     }

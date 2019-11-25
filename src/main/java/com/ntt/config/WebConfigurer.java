@@ -28,21 +28,7 @@ public class WebConfigurer implements ServletContextInitializer {
         this.env = env;
 
     }
-/*
-    @Bean
 
-    public MultipartConfigElement multipartConfigElement() {
-
-         MultipartConfigFactory factory = new MultipartConfigFactory();
-
-         factory.setMaxFileSize(DataSize.parse("128MB"));
-
-         factory.setMaxRequestSize(DataSize.parse("128MB"));
-
-         return factory.createMultipartConfig();
-
-    }
-*/
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         if (env.getActiveProfiles().length != 0) {

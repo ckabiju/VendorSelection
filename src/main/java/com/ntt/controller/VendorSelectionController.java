@@ -10,20 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class VendorSelectionController {
 
-	@RequestMapping({ "/hello" })
-	public String firstPage() {
-		return "Hello World First Code commit";
-	}
-	
-	@RequestMapping({ "/test" })
-	public String testPage() {
-		return "Testing Hello World";
-	}
+	private static final String INIT = "Initialized";
 
+	/**
+	 * {@code GET  Checks the Initialization of API's
+	 *
+	 * @return the {@link ResponseEntity} with status {@code 200 (ok)} and with body the String as Initialized
+	 *
+	 */
 	@GetMapping("/init")
-	public ResponseEntity<?> init() {
+	public ResponseEntity<String> init() {
 
-		return  new ResponseEntity<>(null, HttpStatus.OK);
+		return  new ResponseEntity<>(INIT, HttpStatus.OK);
 
 	}
 

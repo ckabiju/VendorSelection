@@ -27,6 +27,7 @@ public interface FileContentService {
      *
      *
      * @param file the file need to be uploaded.
+     * @param result the fileContent object.
      * @return the entity.
      */
 	void parsingFile(MultipartFile file, FileContent result) throws InterruptedException;

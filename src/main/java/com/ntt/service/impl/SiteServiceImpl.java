@@ -50,6 +50,13 @@ public class SiteServiceImpl implements SiteService {
 		return  convertSiteToSiteDTO(siteRecord);
 	}
 
+
+	/**
+	 * Creates SiteDTO object from Site object
+	 *
+	 * @param site
+	 * @return siteDTo Entity
+	 */
 	private SiteDTO convertSiteToSiteDTO(Site site){
 
 		SiteDTO siteDTO = new SiteDTO();
@@ -57,6 +64,14 @@ public class SiteServiceImpl implements SiteService {
 		siteDTO.setSiteName(site.getSiteName());
 		return siteDTO;
 	}
+
+
+	/**
+	 * Creates Site object from SiteDTO object
+	 *
+	 * @param siteDTO .
+	 * @return site Entity
+	 */
 	private Site convertSiteDTOToSite(SiteDTO siteDTO){
 
 		Site site = new Site();
@@ -64,11 +79,17 @@ public class SiteServiceImpl implements SiteService {
 		site.setSiteName(siteDTO.getSiteName());
 		return site;
 	}
+
+	/**
+	 * Fetches the Site by NPI
+	 *
+	 * @param npi .
+	 * @return siteDTO
+	 */
 	// Fetching Site From DB
 	@Override
 	@Transactional(readOnly = true)
 	public Optional<SiteDTO> findOneBySiteNPI(String npi) {
-		// TODO Auto-generated method stub
 		Optional<Site> site = siteRepository.findFirstByOrderByNpiAsc(npi);
 		if(site.isPresent()){
 			SiteDTO siteDTO = new SiteDTO();
