@@ -22,7 +22,6 @@ public class SiteItem implements Serializable {
     
     private BigDecimal totalValue;
 
-   
 
     public String getNdc() {
         return ndc;
@@ -75,7 +74,7 @@ public class SiteItem implements Serializable {
     public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
 
     @Override
     public boolean equals(Object o) {

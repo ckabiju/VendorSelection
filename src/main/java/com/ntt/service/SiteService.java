@@ -2,7 +2,9 @@ package com.ntt.service;
 
 import com.ntt.hibernate.Entity.StockDetails;
 import com.ntt.model.DriverSite;
-import com.ntt.model.Site;
+import com.ntt.hibernate.Entity.Site;
+import com.ntt.model.SiteDTO;
+
 import java.util.Optional;
 
 /**
@@ -10,21 +12,21 @@ import java.util.Optional;
  */
 public interface SiteService {
 
-     /**
-     * Save Driver Sites.
-     *
-     * @param sites to be created.
-     * @return the entityDTO.
-     */
-    DriverSite saveDriverSite(DriverSite sites);
 
+    /**
+     * Save a site.
+     *
+     * @param site the entity to save.
+     * @return the persisted entity.
+     */
+    SiteDTO save(SiteDTO site);
     /**
      * Get Site.
      *
      * @param npi the id of the entity.
      * @return the entity.
      */
-    Optional<Site> findOneBySite(String npi);
+    Optional<SiteDTO> findOneBySiteNPI(String npi);
 
     public void saveStockDetails(StockDetails stockDetails);
 

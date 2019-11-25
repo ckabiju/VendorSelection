@@ -137,7 +137,11 @@ public class StockDetails implements Serializable {
         if (!(o instanceof StockDetails)) {
             return false;
         }
-        return id != null && id.equals(((StockDetails) o).id);
+        StockDetails obj = (StockDetails) o;
+        return  (id != null && id.equals(obj.id) )&&
+                (null != ndc && null != obj.ndc) && ndc.equals(obj.ndc) &&
+                (null != unitsCost && null != obj.unitsCost) && unitsCost.equals(obj.unitsCost) &&
+                (null != units && null != obj.units) && units.equals(obj.units);
     }
 
     @Override

@@ -51,7 +51,7 @@ public class FileContentServiceImpl implements FileContentService {
 		//	fileContent2.setContent(fileContent.getBytes());
 			fileContent2.setType(fileContent.getContentType());
 			fileContent2.setGuid(UUID.randomUUID());
-			String status = FileStatus.PROCESSING.toString();
+			String status = FileStatus.Processing.toString();
 			fileContent2.setStatus(status);
 			fileContentRepository.save(fileContent2);
 			try {
@@ -60,8 +60,6 @@ public class FileContentServiceImpl implements FileContentService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-		
 		return fileContent2;
 	}
 	
@@ -93,8 +91,7 @@ public class FileContentServiceImpl implements FileContentService {
 	public  static void  multipartToFile(MultipartFile multipart, FileContent fileContent) throws IllegalStateException, IOException {
 	    File convFile = new File(getTemFile(fileContent));
 	    FileUtils.writeByteArrayToFile(convFile, multipart.getBytes());
-	   // multipart.transferTo(convFile);
-	    
+
 	   
 	}
 
@@ -130,8 +127,10 @@ public class FileContentServiceImpl implements FileContentService {
 							if (!((isNumeric(siteItem[2]) && isNumeric(siteItem[3])))) {
 								invalidRecordCount++;
 							}
-						}else{
+						}else if(line.length() > 0){
 							invalidRecordCount++;
+						}else if(line.isEmpty()){
+							totalRecordCount = totalRecordCount-1;
 						}
 
 					}
@@ -146,16 +145,11 @@ public class FileContentServiceImpl implements FileContentService {
 		}
 		 Optional<FileContent> record = fileContentRepository.findById(fileContent.getId());
 		 FileContent finalRecord = record.get();
-		 finalRecord.setStatus(FileStatus.COMPLETED.toString());
+		 finalRecord.setStatus(FileStatus.Completed.toString());
 		 finalRecord.setInvalidRecordCount(invalidRecordCount);
 		 finalRecord.setTotalRecordCount(totalRecordCount);
 		 asyncService.saveFileContent(finalRecord);
-		 log.debug("Exiting  parsingFile() FileContent : {}");
-		 log.debug("ParsingFile() validRecordCount : {}"+ validRecordCount);
-		 log.debug("ParsingFile() invalidRecordCount : {}"+ invalidRecordCount);
-		 log.debug("ParsingFile() totalRecordCount : {}"+ totalRecordCount);
-		
-	}
+    }
 
 	@Override
 	public  Optional<FileContent> findByGuid(String guid) {
@@ -171,7 +165,7 @@ public class FileContentServiceImpl implements FileContentService {
 		UploadFileResponseDTO uploadFileResponseDTO = new UploadFileResponseDTO();
         uploadFileResponseDTO.setFileName(result.getFileName());
         uploadFileResponseDTO.setGuid(result.getGuid().toString());
-        uploadFileResponseDTO.setStatus(FileStatus.PROCESSING);
+        uploadFileResponseDTO.setStatus(FileStatus.Processing);
         return uploadFileResponseDTO;
 	}
 
@@ -190,7 +184,7 @@ public class FileContentServiceImpl implements FileContentService {
 			Long validRecordCount = fileContent.getTotalRecordCount() - fileContent.getInvalidRecordCount();
 			fileContentDTO.setValidRecordCount(validRecordCount);
 		}
-		if( fileContent.getStatus().equalsIgnoreCase(FileStatus.PROCESSING.toString())) {
+		if( fileContent.getStatus().equalsIgnoreCase(FileStatus.Processing.toString())) {
 			fileContentDTO.setTotalRecordCount(0L);
 			fileContentDTO.setValidRecordCount(0L);
 			fileContentDTO.setInvalidRecordCount(0L);

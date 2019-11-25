@@ -1,12 +1,11 @@
 package com.ntt.service.impl;
 
 import com.ntt.hibernate.Entity.StockDetails;
+import com.ntt.hibernate.dao.SiteDao;
 import com.ntt.hibernate.dao.StockDetailsDao;
+import com.ntt.model.SiteDTO;
 import com.ntt.service.SiteService;
-import com.ntt.model.DriverSite;
-import com.ntt.model.InventorySummary;
-import com.ntt.model.Site;
-import com.ntt.model.SiteItem;
+import com.ntt.hibernate.Entity.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,82 +20,64 @@ import java.util.Optional;
 public class SiteServiceImpl implements SiteService {
 
     private final Logger log = LoggerFactory.getLogger(SiteServiceImpl.class);
-
     private final StockDetailsDao stockDetailsRepository;
+	private final SiteDao siteRepository;
 
-    public SiteServiceImpl(StockDetailsDao stockDetailsRepository) {
+    public SiteServiceImpl(StockDetailsDao stockDetailsRepository,SiteDao siteRepository) {
         this.stockDetailsRepository = stockDetailsRepository;
+        this.siteRepository = siteRepository;
     }
 
+	/**
+	 * Save a stockDetails.
+	 *
+	 * @param stockDetails the entity to save.
+	 * @return the persisted entity.
+	 */
     public void saveStockDetails(StockDetails stockDetails){
-		stockDetailsRepository.save(stockDetails);
+
+    	stockDetailsRepository.save(stockDetails);
 	}
 
 	/**
-	 * Save Sites.
+	 * Save a site.
 	 *
-	 * @param sites the id of the entity.
-	 * @return the entity.
+	 * @param site the entity to save.
+	 * @return the persisted entity.
 	 */
-    @Override
-    public DriverSite saveDriverSite(DriverSite sites) {
-			
-		DriverSite driverSite = new DriverSite();
-		if( null != sites) {
-			
-			Site site = sites.getSite();
-			InventorySummary inventorySummary = sites.getInventorySummary();
-			StockDetails highestUnitCostSiteItem = getStockDetails(inventorySummary.getHighestUnitCostSiteItem(),site);
-			StockDetails highestInventoryValueSiteItem = getStockDetails(inventorySummary.getHighestInventoryValueSiteItem(),site);
-			StockDetails highestInventoryUnitsSiteItem = getStockDetails(inventorySummary.getHighestInventoryUnitsSiteItem(),site);
-			
-			StockDetails lowestUnitCostSiteItem = getStockDetails(inventorySummary.getLowestUnitCostSiteItem(),site);
-			StockDetails lowestInventoryValueSiteItem = getStockDetails(inventorySummary.getLowestInventoryValueSiteItem(),site);
-			StockDetails lowestInventoryUnitsSiteItem = getStockDetails(inventorySummary.getLowestInventoryUnitsSiteItem(),site);
-			
-			stockDetailsRepository.save(highestUnitCostSiteItem);
-			stockDetailsRepository.save(highestInventoryValueSiteItem);
-			stockDetailsRepository.save(highestInventoryUnitsSiteItem);
-			
-			stockDetailsRepository.save(lowestUnitCostSiteItem);
-			stockDetailsRepository.save(lowestInventoryValueSiteItem);
-			stockDetailsRepository.save(lowestInventoryUnitsSiteItem);
-		}
-		return sites;
+	public SiteDTO save(SiteDTO site){
+		Site siteRecord = siteRepository.save(convertSiteDTOToSite(site));
+		return  convertSiteToSiteDTO(siteRecord);
 	}
 
-	/*
-	 *  Creating Stock Detail record
-	 */
-	private StockDetails getStockDetails(SiteItem siteItem, Site site) {
-		
-		StockDetails stockDetaild = new StockDetails();
-		stockDetaild.setNdc(siteItem.getNdc());
-		stockDetaild.setNpi(site.getNpi());
-		stockDetaild.setSiteName(site.getSiteName());
-		stockDetaild.setUnits(siteItem.getTotalUnits().toString());
-		stockDetaild.setUnitsCost(siteItem.getUnitCost().toString());
-		//stockDetaild.setTotalValue(siteItem.getTotalValue());
-		
-		return stockDetaild;
+	private SiteDTO convertSiteToSiteDTO(Site site){
 
+		SiteDTO siteDTO = new SiteDTO();
+		siteDTO.setNpi(site.getNpi());
+		siteDTO.setSiteName(site.getSiteName());
+		return siteDTO;
 	}
+	private Site convertSiteDTOToSite(SiteDTO siteDTO){
 
+		Site site = new Site();
+		site.setNpi(siteDTO.getNpi());
+		site.setSiteName(siteDTO.getSiteName());
+		return site;
+	}
 	// Fetching Site From DB
 	@Override
-	public Optional<Site> findOneBySite(String npi) {
+	@Transactional(readOnly = true)
+	public Optional<SiteDTO> findOneBySiteNPI(String npi) {
 		// TODO Auto-generated method stub
-		Optional<StockDetails> stockDetails = stockDetailsRepository.findFirstByOrderByNpiAsc(npi);
-		
-		Site site = new Site();
-		if(stockDetails.isPresent()) {
-			site.setNpi(stockDetails.get().getNpi());
-			site.setSiteName(stockDetails.get().getSiteName());
-			return Optional.of(site);
+		Optional<Site> site = siteRepository.findFirstByOrderByNpiAsc(npi);
+		if(site.isPresent()){
+			SiteDTO siteDTO = new SiteDTO();
+			siteDTO.setSiteName(site.get().getSiteName());
+			siteDTO.setNpi(site.get().getNpi());
+			return Optional.of(siteDTO);
 		}
 		return Optional.empty();
 
-			
 	}
 
 }

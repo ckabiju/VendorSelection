@@ -1,5 +1,6 @@
 package com.ntt.controller;
 
+import com.ntt.controller.Utils.ResponseUtil;
 import com.ntt.hibernate.Entity.FileContent;
 import com.ntt.service.FileContentService;
 import com.ntt.model.FileContentDTO;
@@ -62,9 +63,15 @@ public class FileController{
     public ResponseEntity<FileContentDTO> getFileDetails(@PathVariable String id) throws URISyntaxException {
         log.debug("REST request to get FileContent : {}",id);
         Optional<FileContent> fileContent = fileContentService.findByGuid(id);
-        FileContentDTO fileDetails = fileContentService.createFileContentDTO(fileContent.get());
-        String guid = fileDetails.getGuid().toString();
-        return ResponseEntity.created(new URI("/api/files/qoh/" + guid)).body(fileDetails);
+
+        if(fileContent.isPresent()){
+            FileContentDTO fileDetails = fileContentService.createFileContentDTO(fileContent.get());
+            return ResponseUtil.wrapOrNotFound(Optional.of(fileDetails));
+        }
+        return ResponseUtil.wrapOrNotFound(Optional.empty());
+
+
+
     }
 
 }

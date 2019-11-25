@@ -1,9 +1,7 @@
 package com.ntt.controller;
 
-import com.ntt.hibernate.Entity.StockDetails;
+import com.ntt.model.SiteDTO;
 import com.ntt.service.SiteService;
-import com.ntt.model.DriverSite;
-import com.ntt.model.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -30,15 +28,14 @@ public class SiteController {
        /**
      * {@code POST  /sites} : Create a new DriverSite.
      *
-     * @param sites the DriverSite to create.
+     * @param site the DriverSite to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new stockDetails, or with status {@code 400 (Bad Request)} if the stockDetails has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/sites")
-    public ResponseEntity<DriverSite> createSites(@RequestBody DriverSite sites) throws URISyntaxException {
-        log.debug("REST request to save StockDetails : {}", sites);
-        DriverSite result = siteService.saveDriverSite(sites);
-
+    public ResponseEntity<SiteDTO> createSites(@RequestBody SiteDTO site) throws URISyntaxException {
+        log.debug("REST request to save StockDetails : {}", site);
+        SiteDTO result = siteService.save(site);
         return ResponseEntity.created(new URI("/api/sites/")).body(result);
     }
 
@@ -49,9 +46,9 @@ public class SiteController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the stockDetails, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/sites/{npi}")
-    public ResponseEntity<Site> getSite(@PathVariable String npi) {
+    public ResponseEntity<SiteDTO> getSite(@PathVariable String npi) {
         log.debug("REST request to get StockDetails : {}", npi);
-        Optional<Site> stockDetails = siteService.findOneBySite(npi);
+        Optional<SiteDTO> stockDetails = siteService.findOneBySiteNPI(npi);
         return ResponseUtil.wrapOrNotFound(stockDetails);
     }
 
