@@ -76,6 +76,9 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
+
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+
 					<webResources>
 						<resource>
 							<directory>.ebextensions</directory>
